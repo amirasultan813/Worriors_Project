@@ -1,0 +1,130 @@
+<!--GUI for Breast Cancer Detection Application using SVM-->
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <title>Breast Cancer Detection</title>
+  <style>
+    /*just bg and body style*/
+    body {
+      margin: 40px;
+      background-color: #808080;
+      background-image: linear-gradient(315deg, #de5499 19%, #a0c5ba 85%);
+    }
+
+    .container {
+      border-radius: 5px;
+      text-align: center;
+    }
+
+    .btn-container {
+      background: white;
+      box-shadow: 0 19px 38px rgba(0, 0, 0, 0.30), 0 15px 12px rgba(0, 0, 0, 0.22);
+      border-radius: 5px;
+      padding: 10px;
+    }
+
+    .head {
+      font-weight: bolder;
+    }
+
+    .btn-primary {
+      border-color: #ff33ff !important;
+      color: #ffffff;
+      text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+      background-color: #de5499 !important;
+      border-color: #de5499 !important;
+      padding: 5px;
+    }
+
+    label {
+      width: 50%;
+    }
+
+    #predict {
+      display: none;
+    }
+
+    .form-group {
+      padding: 2px;
+    }
+  </style>
+  <!--Font Awesome-->
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</head>
+
+<body>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <h1 class="head" style="margin-bottom: 30px;">Predict Breast Cancer Stage</h1>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="btn-container">
+
+          <!-- Main Input For Receiving Query to our ML -->
+          <form action="{{ url_for('predict')}}" method="post" class="form-inline">
+            <div class="row">
+              <div class="col-md-6">
+                <img class="image" src="https://st4.depositphotos.com/25790974/30706/v/450/depositphotos_307060972-stock-illustration-breast-cancer-awareness.jpg" width="100%" height="100%" />
+                <h6>type (0 or 1) for chemo_therapy , Hormone_therapy , radio_therapy ,overall_Survival</h6>
+              </div>
+              
+              <div class="col-md-6">
+                <div class="container">
+                  <h4 style="margin-top: 50px; margin-bottom:30px;font-size:30px;font-weight: bold;">Enter These Data</h4>
+                  <div class="form-group" style="font-size:20px; font-weight: 500;">
+                    <label for="age">Age</label>
+                    <input type="text" class="form-control" name="age" required="required">
+                  </div>
+                  <div class="form-group" style="font-size:20px; font-weight: 500;">
+                    <label for="Chemo_Therapy">Chemo_Therapy</label>
+                    <input type="text" class="form-control" name="Chemo_Therapy" required="required">
+                  </div>
+                  <div class="form-group" style="font-size:20px; font-weight: 500;">
+                    <label for="Hormone_Therapy">Hormone_Therapy</label>
+                    <input type="text" class="form-control" name="Hormone_Therapy" required="required" />
+                  </div>
+                  <div class="form-group" style="font-size:20px; font-weight: 500;">
+                    <label for="Lymph_Nodes_Examied_Positive">Lymph Nodes Examied Positive</label>
+                    <input type="text" class="form-control" name="Lymph_Nodes_Examied_Positive" required="required" />
+                  </div>
+                  <div class="form-group" style="font-size:20px; font-weight: 500;">
+                    <label for="Radio_Therapy">Radio Therapy</label>
+                    <input type="text" class="form-control" name="Radio_Therapy" required="required" />
+                  </div>
+                  <div class="form-group" style="font-size:20px; font-weight: 500;">
+                    <label for="Mutation_Count">Mutation Count</label>
+                    <input type="text" class="form-control" name="Mutation_Count" required="required" />
+                  </div>
+                  <div class="form-group"style="font-size:20px; font-weight: 500;">
+                    <label for="Overall_Survival">Overall Survival</label>
+                    <input type="text" class="form-control" name="Overall_Survival" required="required" />
+                  </div>
+                  <div class="form-group"style="font-size:20px; font-weight: 500;">
+                    <label for="Tumor_Size">Tumor Size</label>
+                    <input type="text" class="form-control" name="Tumor_Size" required="required" />
+                  </div>
+
+                  <button type="submit" class="btn btn-primary btn-lg" style="margin-top: 50px;">Predict Tumor Stage</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        <br />
+        <br />
+</body>
+
+</html>
